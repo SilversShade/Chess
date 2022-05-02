@@ -12,10 +12,11 @@ protected:
     int xPos;
     int yPos;
     bool isAlive = true;
-    sf::Texture texture;
+    sf::Texture* texture;
     sf::Sprite sprite;
 public:
-    static inline const int pieceSizePx = -1; //define general proper piece size
+    sf::Sprite getSprite();
+    static inline const int pieceSizePx = 105; //define general proper piece size
     std::pair<int, int> getPosition(); // common method
-    virtual void move(int, int) = 0; // will be overridden by each type of pieces
+    //virtual void move(int, int) = 0; // will be overridden by each type of pieces
 };

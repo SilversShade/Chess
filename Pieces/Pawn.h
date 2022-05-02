@@ -3,5 +3,5 @@
 
 class Pawn : public Piece {
 public:
-    Pawn();
+    Pawn(PieceColor, int, int);
 };
