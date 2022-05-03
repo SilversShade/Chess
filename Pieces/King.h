@@ -3,5 +3,5 @@
 
 class King : public Piece{
 public:
-    King();
+    King(PieceColor, int, int);
 };

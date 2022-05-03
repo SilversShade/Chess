@@ -3,5 +3,5 @@
 
 class Queen : public Piece{
 public:
-    Queen();
+    Queen(PieceColor, int, int);
 };

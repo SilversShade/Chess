@@ -3,5 +3,5 @@
 
 class Bishop : public Piece{
 public:
-    Bishop();
+    Bishop(PieceColor, int, int);
 };

@@ -4,19 +4,21 @@
 using namespace sf;
 
 void Field::arrangePiecesOnBoard() {
-    float startDrawingPosX = 72.0f, startDrawingPosY = 177.0f;
+    float startDrawingPosX = 70.0f, startDrawingPosY = 177.0f;
     int piecePosX=1, piecePosY=0;
     for (int i=0;i<8;i++) {
-        Pawn newPawn(PieceColor::BLACK, piecePosX, piecePosY);
-        newPawn.getSprite().setPosition(startDrawingPosX, startDrawingPosY);
-        this->pieces.push_back(newPawn);
+        this->pieces.push_back(Pawn(PieceColor::BLACK, piecePosX, piecePosY));
+        this->pieces.back().getSprite()->setPosition(startDrawingPosX, startDrawingPosY);
+        this->pieces.push_back(Pawn(PieceColor::WHITE, piecePosX+6, piecePosY));
+        this->pieces.back().getSprite()->setPosition(startDrawingPosX, startDrawingPosY+(Piece::pieceSizePx*5));
         piecePosY++;
-        startDrawingPosX+=105.0f;
+        startDrawingPosX+=Piece::pieceSizePx;
     }
 }
 
 Field::Field() {
     this->window.create(VideoMode(1000,1000), "Chess", Style::Close);
+    this->window.setPosition(Vector2i(450,0));
 
     this->boardTexture.loadFromFile("../Resources/board.png");
     this->boardSprite.setTexture(boardTexture);
@@ -33,7 +35,7 @@ Field::Field() {
         window.clear();
         window.draw(boardSprite);
         for (auto piece:this->pieces)
-            window.draw(piece.getSprite());
+            window.draw(*piece.getSprite());
         window.display();
     }
 }

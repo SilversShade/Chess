@@ -3,5 +3,5 @@
 
 class Rook : public Piece{
 public:
-    Rook();
+    Rook(PieceColor, int, int);
 };
