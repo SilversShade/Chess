@@ -6,4 +6,5 @@ Knight::Knight(PieceColor color, int x, int y) : Piece(color, x, y){
         ? texture->loadFromFile("../Resources/white_knight.png")
         : texture->loadFromFile("../Resources/black_knight.png");
     this->sprite.setTexture(*texture);
+    this->type = PieceType::KNIGHT;
 }

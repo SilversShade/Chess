@@ -1,18 +1,52 @@
 #include "Field.h"
 #include "../Pieces/Pawn.h"
-#include <iostream>
+#include "../Pieces/Rook.h"
+#include "../Pieces/Knight.h"
+#include "../Pieces/Bishop.h"
+#include "../Pieces/King.h"
+#include "../Pieces/Queen.h"
 using namespace sf;
 
+float placeWithOffset(int pieceOffset) {
+    return Field::offset+static_cast<float>(Piece::pieceSizePx)*static_cast<float>(pieceOffset);
+}
+
 void Field::arrangePiecesOnBoard() {
-    float startDrawingPosX = 70.0f, startDrawingPosY = 177.0f;
+    this->pieces.clear();
+    float startDrawingPosX = Field::offset;
     int piecePosX=1, piecePosY=0;
     for (int i=0;i<8;i++) {
         this->pieces.push_back(Pawn(PieceColor::BLACK, piecePosX, piecePosY));
-        this->pieces.back().getSprite()->setPosition(startDrawingPosX, startDrawingPosY);
-        this->pieces.push_back(Pawn(PieceColor::WHITE, piecePosX+6, piecePosY));
-        this->pieces.back().getSprite()->setPosition(startDrawingPosX, startDrawingPosY+(Piece::pieceSizePx*5));
+        this->pieces.back().getSprite()->setPosition(startDrawingPosX, Field::offset+107);
+        this->pieces.push_back(Pawn(PieceColor::WHITE, piecePosX+5, piecePosY));
+        this->pieces.back().getSprite()->setPosition(startDrawingPosX, placeWithOffset(5)+107);
         piecePosY++;
         startDrawingPosX+=Piece::pieceSizePx;
+    }
+    std::vector<std::pair<int, int> > coordinates = {{0,0}, {0,7}, {7,0},{7,7}};
+    for (const auto &i:coordinates) {
+        this->pieces.push_back(Rook(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.back().getSprite()->setPosition(placeWithOffset(i.second), placeWithOffset(i.first));
+    }
+    coordinates = {{0,1}, {0,6}, {7,1}, {7,6}};
+    for (const auto &i:coordinates) {
+        this->pieces.push_back(Knight(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.back().getSprite()->setPosition(placeWithOffset(i.second), placeWithOffset(i.first));
+    }
+    coordinates = {{0,2}, {0,5}, {7,2},{7,5}};
+    for (const auto &i:coordinates) {
+        this->pieces.push_back(Bishop(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.back().getSprite()->setPosition(placeWithOffset(i.second), placeWithOffset(i.first));
+    }
+    coordinates = {{0,4}, {7,4}};
+    for (const auto &i:coordinates) {
+        this->pieces.push_back(King(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.back().getSprite()->setPosition(placeWithOffset(i.second), placeWithOffset(i.first));
+    }
+    coordinates = {{0,3}, {7,3}};
+    for (const auto &i:coordinates) {
+        this->pieces.push_back(Queen(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.back().getSprite()->setPosition(placeWithOffset(i.second), placeWithOffset(i.first));
     }
 }
 
@@ -35,7 +69,8 @@ Field::Field() {
         window.clear();
         window.draw(boardSprite);
         for (auto piece:this->pieces)
-            window.draw(*piece.getSprite());
+            if (piece.isAlive())
+                window.draw(*piece.getSprite());
         window.display();
     }
 }

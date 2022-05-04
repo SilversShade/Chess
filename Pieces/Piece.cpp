@@ -13,3 +13,7 @@ Piece::Piece(PieceColor color, int x, int y) {
     this->xPos = x;
     this->yPos = y;
 }
+
+bool Piece::isAlive() {
+    return this->alive;
+}

@@ -17,6 +17,7 @@ private:
     sf::Sprite boardSprite;
 
     PieceColor turn = PieceColor::WHITE;
+    static inline const float offset = 70.0f;
     //static inline const int field[8][8] = {
     //  -1,-2,-3,-4,-5,-3,-2,-1,
     //  -6,-6,-6,-6,-6,-6,-6,-6,
@@ -30,6 +31,7 @@ private:
     std::vector<Piece> pieces;
     //methods:
     void arrangePiecesOnBoard();
+    friend float placeWithOffset(int pieceOffset);
 public:
     Field();
 };
