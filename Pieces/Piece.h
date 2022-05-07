@@ -7,6 +7,7 @@ enum class PieceColor {
 };
 
 enum class PieceType {
+    NULLTYPE,
     PAWN,
     KING,
     QUEEN,
@@ -25,14 +26,19 @@ protected:
     sf::Sprite sprite;
     Piece(PieceColor, int, int);
 public:
+    //getters:
     sf::Sprite* getSprite();
-    PieceType getType();
-    PieceColor getColor();
-    int getPosX();
-    int getPosY();
-    bool isAlive();
+    PieceType* getType();
+    PieceColor* getColor();
+    int* getPosX();
+    int* getPosY();
+    bool* isAlive();
+
+    //setters:
+    void setPosX(int);
+    void setPosY(int);
+    void setIsAlive(bool);
 
     static inline const int pieceSizePx = 108; //define general proper piece size
-    std::pair<int, int> getPosition(); // common method
     //virtual void move(int, int) = 0; // will be overridden by each type of pieces
 };

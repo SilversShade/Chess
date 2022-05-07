@@ -5,6 +5,7 @@
 #include "../Pieces/Bishop.h"
 #include "../Pieces/King.h"
 #include "../Pieces/Queen.h"
+#include <iostream>
 using namespace sf;
 
 float placeWithOffset(int pieceOffset) {
