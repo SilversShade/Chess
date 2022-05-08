@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "bugprone-integer-division"
 #include "Field.h"
 #include "../Pieces/Pawn.h"
 #include "../Pieces/Rook.h"
@@ -20,44 +18,44 @@ float placeWithOffset(int pieceOffset, char axis) {
 void Field::arrangePiecesOnBoard() {
     this->pieces.clear();
     float startDrawingPosX = Field::offsetX;
-    int piecePosX=1, piecePosY=0;
+    int piecePosX=0, piecePosY=1;
     for (int i=0;i<8;i++) {
         this->pieces.push_back(new Pawn(PieceColor::BLACK, piecePosX, piecePosY));
         this->pieces.back()->getSprite()->setPosition(startDrawingPosX, Field::offsetY+Piece::pieceSize);
         this->pieces.back()->getSprite()->setTexture(this->pawnBlack);
-        this->pieces.push_back(new Pawn(PieceColor::WHITE, piecePosX+5, piecePosY));
+        this->pieces.push_back(new Pawn(PieceColor::WHITE, piecePosX, piecePosY+5));
         this->pieces.back()->getSprite()->setPosition(startDrawingPosX, placeWithOffset(5, 'y')+Piece::pieceSize);
         this->pieces.back()->getSprite()->setTexture(this->pawnWhite);
-        piecePosY++;
+        piecePosX++;
         startDrawingPosX+=Piece::pieceSize;
     }
     std::vector<std::pair<int, int> > coordinates = {{0,0}, {0,7}, {7,0},{7,7}};
     for (const auto &i:coordinates) {
-        this->pieces.push_back(new Rook(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.push_back(new Rook(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.second, i.first));
         this->pieces.back()->getSprite()->setPosition(placeWithOffset(i.second, 'x'), placeWithOffset(i.first, 'y'));
         this->pieces.back()->getSprite()->setTexture(i.first == 0 ? this->rookBlack : this->rookWhite);
     }
     coordinates = {{0,1}, {0,6}, {7,1}, {7,6}};
     for (const auto &i:coordinates) {
-        this->pieces.push_back(new Knight(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.push_back(new Knight(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.second, i.first));
         this->pieces.back()->getSprite()->setPosition(placeWithOffset(i.second, 'x'), placeWithOffset(i.first, 'y'));
         this->pieces.back()->getSprite()->setTexture(i.first == 0 ? this->knightBlack : this->knightWhite);
     }
     coordinates = {{0,2}, {0,5}, {7,2},{7,5}};
     for (const auto &i:coordinates) {
-        this->pieces.push_back(new Bishop(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.push_back(new Bishop(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.second, i.first));
         this->pieces.back()->getSprite()->setPosition(placeWithOffset(i.second, 'x'), placeWithOffset(i.first, 'y'));
         this->pieces.back()->getSprite()->setTexture(i.first == 0 ? this->bishopBlack : this->bishopWhite);
     }
     coordinates = {{0,4}, {7,4}};
     for (const auto &i:coordinates) {
-        this->pieces.push_back(new King(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.push_back(new King(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.second, i.first));
         this->pieces.back()->getSprite()->setPosition(placeWithOffset(i.second, 'x'), placeWithOffset(i.first, 'y'));
         this->pieces.back()->getSprite()->setTexture(i.first == 0 ? this->kingBlack : this->kingWhite);
     }
     coordinates = {{0,3}, {7,3}};
     for (const auto &i:coordinates) {
-        this->pieces.push_back(new Queen(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.first, i.second));
+        this->pieces.push_back(new Queen(i.first == 0 ? PieceColor::BLACK : PieceColor::WHITE, i.second, i.first));
         this->pieces.back()->getSprite()->setPosition(placeWithOffset(i.second, 'x'), placeWithOffset(i.first, 'y'));
         this->pieces.back()->getSprite()->setTexture(i.first == 0 ? this->queenBlack : this->queenWhite);
     }
@@ -87,6 +85,8 @@ void Field::loadTextures() {
 }
 
 void Field::changeTurn() {
+    if (*this->pieces[this->chosenPieceNumber]->getPosX() == this->xEnd && *this->pieces[this->chosenPieceNumber]->getPosY() == this->yEnd)
+        return;
     this->turn == PieceColor::WHITE ? this->turn = PieceColor::BLACK : this->turn = PieceColor::WHITE;
 }
 
@@ -112,9 +112,14 @@ void Field::leftMouseButtonReleased() {
                          (static_cast<float>((Piece::pieceSize)*(static_cast<int>(p.y-Field::offsetY)/Piece::pieceSize) + Field::offsetY))));
         this->xEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().x - Field::offset)/Piece::pieceSize));
         this->yEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().y - Field::offset)/Piece::pieceSize));
+
+        std::cout << *this->pieces[this->chosenPieceNumber]->getPosX() << " " << *this->pieces[this->chosenPieceNumber]->getPosY() << "\n";
         std::cout << this->xEnd << " " << this->yEnd << "\n";
+
         if (this->pieces[this->chosenPieceNumber]->isMoveValid(xEnd, yEnd)) {
             changeTurn();
+            *this->pieces[this->chosenPieceNumber]->getPosX() = this->xEnd;
+            *this->pieces[this->chosenPieceNumber]->getPosY() = this->yEnd;
         }
     }
 }
@@ -152,5 +157,3 @@ Field::~Field() {
     for (int i=0;i<32;i++)
         delete this->pieces[i];
 }
-
-#pragma clang diagnostic pop
