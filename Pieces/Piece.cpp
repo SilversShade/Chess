@@ -15,12 +15,12 @@ bool* Piece::isAlive() {
     return &this->alive;
 }
 
-PieceType *Piece::getType() {
-    return &this->type;
+PieceType Piece::getType() {
+    return this->type;
 }
 
-PieceColor *Piece::getColor() {
-    return &this->color;
+PieceColor Piece::getColor() {
+    return this->color;
 }
 
 int *Piece::getPosX() {
@@ -41,4 +41,8 @@ void Piece::setPosY(int newYPos) {
 
 void Piece::setIsAlive(bool isAlive) {
     this->alive = isAlive;
+}
+
+bool Piece::isMoveValid(int, int) {
+    return false;
 }

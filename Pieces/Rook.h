@@ -4,4 +4,5 @@
 class Rook : public Piece{
 public:
     Rook(PieceColor, int, int);
+    bool isMoveValid(int xEnd, int yEnd) override;
 };

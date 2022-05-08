@@ -4,4 +4,5 @@
 class Bishop : public Piece{
 public:
     Bishop(PieceColor, int, int);
+    bool isMoveValid(int xEnd, int yEnd) override;
 };

@@ -28,8 +28,8 @@ protected:
 public:
     //getters:
     sf::Sprite* getSprite();
-    PieceType* getType();
-    PieceColor* getColor();
+    PieceType getType();
+    PieceColor getColor();
     int* getPosX();
     int* getPosY();
     bool* isAlive();
@@ -39,6 +39,6 @@ public:
     void setPosY(int);
     void setIsAlive(bool);
 
-    static inline const int pieceSizePx = 108; //define general proper piece size
-    //virtual void move(int, int) = 0; // will be overridden by each type of pieces
+    static inline const int pieceSize = 108; //define general proper piece size
+    virtual bool isMoveValid(int, int); // will be overridden by each type of pieces
 };
