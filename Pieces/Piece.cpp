@@ -11,10 +11,6 @@ sf::Sprite* Piece::getSprite() {
     return &this->sprite;
 }
 
-bool* Piece::isAlive() {
-    return &this->alive;
-}
-
 PieceType Piece::getType() {
     return this->type;
 }
@@ -23,12 +19,12 @@ PieceColor Piece::getColor() {
     return this->color;
 }
 
-int *Piece::getPosX() {
-    return &this->xPos;
+int Piece::getPosX() const{
+    return this->xPos;
 }
 
-int *Piece::getPosY() {
-    return &this->yPos;
+int Piece::getPosY() const{
+    return this->yPos;
 }
 
 void Piece::setPosX(int newXPos) {
@@ -37,10 +33,6 @@ void Piece::setPosX(int newXPos) {
 
 void Piece::setPosY(int newYPos) {
     this->yPos = newYPos;
-}
-
-void Piece::setIsAlive(bool isAlive) {
-    this->alive = isAlive;
 }
 
 bool Piece::isMoveValid(int, int) {

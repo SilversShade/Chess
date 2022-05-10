@@ -22,7 +22,6 @@ protected:
     PieceColor color;
     int xPos;
     int yPos;
-    bool alive = true;
     sf::Sprite sprite;
     Piece(PieceColor, int, int);
 public:
@@ -30,14 +29,12 @@ public:
     sf::Sprite* getSprite();
     PieceType getType();
     PieceColor getColor();
-    int* getPosX();
-    int* getPosY();
-    bool* isAlive();
+    int getPosX() const;
+    int getPosY() const;
 
     //setters:
     void setPosX(int);
     void setPosY(int);
-    void setIsAlive(bool);
 
     static inline const int pieceSize = 108; //define general proper piece size
     virtual bool isMoveValid(int, int); // will be overridden by each type of pieces

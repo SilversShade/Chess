@@ -27,6 +27,7 @@ private:
     static inline const int offsetX = 72;
     static inline const int offsetY = 68;
     float posX = 0, posY = 0;
+    float initialPosX = 0, initialPosY = 0;
     int xEnd = 0, yEnd = 0;
     bool isPieceMoving = false;
     int chosenPieceNumber = -1;
@@ -38,6 +39,8 @@ private:
     void leftMouseButtonPressed();
     void leftMouseButtonReleased();
     void changeTurn();
+    void checkAndDestroy();
+    void adjustPlacement();
     friend float placeWithOffset(int, char);
 public:
     Field();

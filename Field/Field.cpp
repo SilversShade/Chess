@@ -85,7 +85,7 @@ void Field::loadTextures() {
 }
 
 void Field::changeTurn() {
-    if (*this->pieces[this->chosenPieceNumber]->getPosX() == this->xEnd && *this->pieces[this->chosenPieceNumber]->getPosY() == this->yEnd)
+    if (this->pieces[this->chosenPieceNumber]->getPosX() == this->xEnd && this->pieces[this->chosenPieceNumber]->getPosY() == this->yEnd)
         return;
     this->turn == PieceColor::WHITE ? this->turn = PieceColor::BLACK : this->turn = PieceColor::WHITE;
 }
@@ -95,6 +95,8 @@ void Field::leftMouseButtonPressed() {
         for (int i=0;i<32;i++) {
             if (this->pieces[i]->getSprite()->getGlobalBounds().contains(static_cast<float>(this->mousePos.x), static_cast<float>(this->mousePos.y)) && pieces[i]->getColor() == this->turn) {
                 this->chosenPieceNumber = i;
+                this->initialPosX = this->pieces[i]->getSprite()->getPosition().x;
+                this->initialPosY = this->pieces[i]->getSprite()->getPosition().y;
                 this->posX = static_cast<float>(this->mousePos.x) - pieces[i]->getSprite()->getPosition().x;
                 this->posY = static_cast<float>(this->mousePos.y) - pieces[i]->getSprite()->getPosition().y;
                 this->isPieceMoving = true;
@@ -103,24 +105,37 @@ void Field::leftMouseButtonPressed() {
     }
 }
 
-void Field::leftMouseButtonReleased() {
-    if (this->event.type == Event::MouseButtonReleased && this->event.mouseButton.button == Mouse::Left && this->isPieceMoving) {
-        this->isPieceMoving = false;
+void Field::checkAndDestroy() {
+    for (int i=0;i<32;i++)
+        if (this->pieces[i]->getPosX() == this->xEnd && this->pieces[i]->getPosY() == this->yEnd && i != this->chosenPieceNumber) {
+            this->pieces[i]->getSprite()->setPosition(-100, -100);
+            this->pieces[i]->setPosX(-1);
+            this->pieces[i]->setPosY(-1);
+        }
+}
+
+void Field::adjustPlacement() {
         Vector2f p = this->pieces[this->chosenPieceNumber]->getSprite()->getPosition() + Vector2f(static_cast<float>(Piece::pieceSize)/2, static_cast<float>(Piece::pieceSize)/2);
         this->pieces[this->chosenPieceNumber]->getSprite()->setPosition(
                 Vector2f((static_cast<float>((Piece::pieceSize)*(static_cast<int>(p.x-Field::offsetX)/Piece::pieceSize) + Field::offsetX)),
                          (static_cast<float>((Piece::pieceSize)*(static_cast<int>(p.y-Field::offsetY)/Piece::pieceSize) + Field::offsetY))));
+}
+
+void Field::leftMouseButtonReleased() {
+    if (this->event.type == Event::MouseButtonReleased && this->event.mouseButton.button == Mouse::Left && this->isPieceMoving) {
+        this->isPieceMoving = false;
+        adjustPlacement();
         this->xEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().x - Field::offset)/Piece::pieceSize));
         this->yEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().y - Field::offset)/Piece::pieceSize));
 
-        std::cout << *this->pieces[this->chosenPieceNumber]->getPosX() << " " << *this->pieces[this->chosenPieceNumber]->getPosY() << "\n";
-        std::cout << this->xEnd << " " << this->yEnd << "\n";
-
-        if (this->pieces[this->chosenPieceNumber]->isMoveValid(xEnd, yEnd)) {
-            changeTurn();
-            *this->pieces[this->chosenPieceNumber]->getPosX() = this->xEnd;
-            *this->pieces[this->chosenPieceNumber]->getPosY() = this->yEnd;
+        if (!this->pieces[this->chosenPieceNumber]->isMoveValid(this->xEnd, this->yEnd)) {
+            this->pieces[this->chosenPieceNumber]->getSprite()->setPosition(this->initialPosX, this->initialPosY);
+            return;
         }
+        changeTurn();
+        checkAndDestroy();
+        this->pieces[this->chosenPieceNumber]->setPosX(this->xEnd);
+        this->pieces[this->chosenPieceNumber]->setPosY(this->yEnd);
     }
 }
 
@@ -147,8 +162,7 @@ Field::Field() {
         this->window.clear();
         this->window.draw(this->boardSprite);
         for (auto piece:this->pieces)
-            if (piece->isAlive())
-                this->window.draw(*piece->getSprite());
+            this->window.draw(*piece->getSprite());
         this->window.display();
     }
 }
