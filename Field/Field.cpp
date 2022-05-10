@@ -125,8 +125,8 @@ void Field::leftMouseButtonReleased() {
     if (this->event.type == Event::MouseButtonReleased && this->event.mouseButton.button == Mouse::Left && this->isPieceMoving) {
         this->isPieceMoving = false;
         adjustPlacement();
-        this->xEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().x - Field::offset)/Piece::pieceSize));
-        this->yEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().y - Field::offset)/Piece::pieceSize));
+        this->xEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().x - Field::offsetX)/Piece::pieceSize));
+        this->yEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().y - Field::offsetY)/Piece::pieceSize));
 
         if (!this->pieces[this->chosenPieceNumber]->isMoveValid(this->xEnd, this->yEnd)) {
             this->pieces[this->chosenPieceNumber]->getSprite()->setPosition(this->initialPosX, this->initialPosY);
