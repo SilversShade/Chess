@@ -1,7 +1,7 @@
 #include "Piece.h"
 
 Piece::Piece(PieceColor color, int x, int y) {
-    this->type = PieceType::NULLTYPE;
+    this->type = PieceType::EMPTY;
     this->color = color;
     this->xPos = x;
     this->yPos = y;
@@ -35,6 +35,19 @@ void Piece::setPosY(int newYPos) {
     this->yPos = newYPos;
 }
 
-bool Piece::isMoveValid(int, int) {
+bool Piece::isMoveValid(int, int, std::vector<Piece*> &pieces) {
     return false;
+}
+
+bool Piece::isCellFreeAt(int x, int y, std::vector<Piece*> &pieces) {
+    return std::all_of(pieces.begin(), pieces.end(), [x, y](Piece* piece) {
+        return piece->getPosX() != x || piece->getPosY() != y;
+    });
+}
+
+PieceColor Piece::checkColorAt(int x, int y, std::vector<Piece *> &pieces) {
+    for (const auto& piece:pieces)
+        if (piece->getPosX() == x && piece->getPosY() == y)
+            return piece->getColor();
+    return PieceColor::EMPTY;
 }

@@ -121,14 +121,19 @@ void Field::adjustPlacement() {
                          (static_cast<float>((Piece::pieceSize)*(static_cast<int>(p.y-Field::offsetY)/Piece::pieceSize) + Field::offsetY))));
 }
 
+bool Field::checkOutOfBorders() const{
+    return this->xEnd>7 || this->xEnd<0 || this->yEnd>7 || this->yEnd<0;
+}
+
 void Field::leftMouseButtonReleased() {
     if (this->event.type == Event::MouseButtonReleased && this->event.mouseButton.button == Mouse::Left && this->isPieceMoving) {
         this->isPieceMoving = false;
         adjustPlacement();
-        this->xEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().x - Field::offsetX)/Piece::pieceSize));
-        this->yEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().y - Field::offsetY)/Piece::pieceSize));
+        this->xEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().x - Field::offset)/Piece::pieceSize));
+        this->yEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().y - Field::offset)/Piece::pieceSize));
 
-        if (!this->pieces[this->chosenPieceNumber]->isMoveValid(this->xEnd, this->yEnd)) {
+        //std::cout << this->xEnd << " " << this->yEnd << "\n";
+        if (!this->pieces[this->chosenPieceNumber]->isMoveValid(this->xEnd, this->yEnd, this->pieces) || checkOutOfBorders()) {
             this->pieces[this->chosenPieceNumber]->getSprite()->setPosition(this->initialPosX, this->initialPosY);
             return;
         }

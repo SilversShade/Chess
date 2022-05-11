@@ -4,6 +4,6 @@ Queen::Queen(PieceColor color, int x, int y) : Piece(color, x, y){
     this->type = PieceType::QUEEN;
 }
 
-bool Queen::isMoveValid(int xEnd, int yEnd) {
+bool Queen::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
     return true;
 }

@@ -3,11 +3,12 @@
 
 enum class PieceColor {
     BLACK,
-    WHITE
+    WHITE,
+    EMPTY
 };
 
 enum class PieceType {
-    NULLTYPE,
+    EMPTY,
     PAWN,
     KING,
     QUEEN,
@@ -37,5 +38,7 @@ public:
     void setPosY(int);
 
     static inline const int pieceSize = 108; //define general proper piece size
-    virtual bool isMoveValid(int, int); // will be overridden by each type of pieces
+    virtual bool isMoveValid(int, int, std::vector<Piece*> &pieces); // will be overridden by each type of pieces
+    static bool isCellFreeAt(int, int, std::vector<Piece*> &pieces);
+    static PieceColor checkColorAt(int, int, std::vector<Piece*> &pieces);
 };

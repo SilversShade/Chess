@@ -23,6 +23,7 @@ private:
     sf::Texture rookWhite, rookBlack;
 
     PieceColor turn = PieceColor::WHITE;
+    static inline const int offset = 70;
     static inline const int offsetX = 72;
     static inline const int offsetY = 68;
     float posX = 0, posY = 0;
@@ -40,9 +41,9 @@ private:
     void changeTurn();
     void checkAndDestroy();
     void adjustPlacement();
+    bool checkOutOfBorders() const;
     friend float placeWithOffset(int, char);
 public:
-    static inline bool startPos = true;
     Field();
     ~Field();
 };
