@@ -5,5 +5,5 @@ Pawn::Pawn(PieceColor color, int x, int y): Piece(color, x, y) {
 }
 
 bool Pawn::isMoveValid(int xEnd, int yEnd) {
-    return true;
+    return false;
 }
