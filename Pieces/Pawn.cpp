@@ -37,7 +37,6 @@ bool Pawn::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
     if (this->getPosX() == xEnd && (this->getColor() == PieceColor::WHITE ? this->getPosY()-yEnd==1 : yEnd-this->getPosY()==1)) {
         if (!isCellFreeAt(xEnd, yEnd, pieces))
             return false;
-        this->enPassantCondition = false;
         return true;
     }
     //en passant
@@ -48,9 +47,11 @@ bool Pawn::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
     PieceColor colorAtDest = checkColorAt(xEnd, yEnd, pieces);
     if (colorAtDest == PieceColor::EMPTY)
         return false;
-    if ((this->getColor() == PieceColor::WHITE ? this->getPosY()-yEnd==1 : this->getPosY()-yEnd==-1) && (this->getPosX()-xEnd==1 || xEnd-this->getPosX()==1) && colorAtDest!=this->getColor()) {
-        this->enPassantCondition = false;
+    if ((this->getColor() == PieceColor::WHITE ? this->getPosY()-yEnd==1 : this->getPosY()-yEnd==-1) && (this->getPosX()-xEnd==1 || xEnd-this->getPosX()==1) && colorAtDest!=this->getColor())
         return true;
-    }
     return false;
+}
+
+void Pawn::setEnPassantCondition(bool newCondition) {
+    this->enPassantCondition = newCondition;
 }

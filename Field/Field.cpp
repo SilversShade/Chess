@@ -87,6 +87,12 @@ void Field::loadTextures() {
 void Field::changeTurn() {
     if (this->pieces[this->chosenPieceNumber]->getPosX() == this->xEnd && this->pieces[this->chosenPieceNumber]->getPosY() == this->yEnd)
         return;
+    //resent en passant condition
+    for (auto &piece:this->pieces) {
+        if (Pawn* p = dynamic_cast<Pawn*>(piece))
+            if (this->turn == PieceColor::WHITE ? p->getColor() == PieceColor::BLACK : p->getColor() == PieceColor::WHITE)
+                p->setEnPassantCondition(false);
+    }
     this->turn == PieceColor::WHITE ? this->turn = PieceColor::BLACK : this->turn = PieceColor::WHITE;
 }
 
