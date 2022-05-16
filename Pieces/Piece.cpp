@@ -51,3 +51,10 @@ PieceColor Piece::checkColorAt(int x, int y, std::vector<Piece *> &pieces) {
             return piece->getColor();
     return PieceColor::EMPTY;
 }
+
+PieceType Piece::checkTypeAt(int x, int y, std::vector<Piece *> &pieces) {
+    for (const auto& piece:pieces)
+        if (piece->getPosX() == x && piece->getPosY() == y)
+            return piece->getType();
+    return PieceType::EMPTY;
+}

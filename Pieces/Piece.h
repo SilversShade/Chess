@@ -41,4 +41,5 @@ public:
     virtual bool isMoveValid(int, int, std::vector<Piece*> &pieces); // will be overridden by each type of pieces
     static bool isCellFreeAt(int, int, std::vector<Piece*> &pieces);
     static PieceColor checkColorAt(int, int, std::vector<Piece*> &pieces);
+    static PieceType checkTypeAt(int, int, std::vector<Piece*> &pieces);
 };
