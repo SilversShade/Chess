@@ -18,6 +18,7 @@ bool Rook::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
                 return false;
             currRookPosY--;
         }
+        this->moved = true;
         return true;
     }
     if (this->getPosX() == xEnd && this->getPosY()<yEnd) {
@@ -28,6 +29,7 @@ bool Rook::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
                 return false;
             currRookPosY++;
         }
+        this->moved = true;
         return true;
     }
     if (this->getPosY() == yEnd && this->getPosX()<xEnd) {
@@ -38,6 +40,7 @@ bool Rook::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
                 return false;
             currRookPosX++;
         }
+        this->moved = true;
         return true;
     }
     if (this->getPosY() == yEnd && this->getPosX()>xEnd) {
@@ -48,7 +51,12 @@ bool Rook::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
                 return false;
             currRookPosX--;
         }
+        this->moved = true;
         return true;
     }
     return false;
+}
+
+bool Rook::hasMoved() const{
+    return this->moved;
 }

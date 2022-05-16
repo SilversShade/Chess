@@ -1,34 +1,10 @@
 #include "King.h"
+#include "Rook.h"
 #include <iostream>
 
 King::King(PieceColor color, int x, int y) : Piece(color, x, y){
     this->type = PieceType::KING;
 }
-
-//bool King::isSafeFromPawn(int x, int y, std::vector<Piece *> &pieces) {
-//
-//    return false;
-//}
-//
-//bool King::isSafeFromKnight(int x, int y, std::vector<Piece *> &pieces) {
-//    return false;
-//}
-//
-//bool King::isSafeFromRook(int x, int y, std::vector<Piece *> &pieces) {
-//    return false;
-//}
-//
-//bool King::isSafeFromBishop(int x, int y, std::vector<Piece *> &pieces) {
-//    return false;
-//}
-//
-//bool King::isSafeFromKing(int x, int y, std::vector<Piece *> &pieces) {
-//    return false;
-//}
-//
-//bool King::isSafeFromQueen(int x, int y, std::vector<Piece *> &pieces) {
-//    return false;
-//}
 
 bool King::isSafeAt(int x, int y, std::vector<Piece*> &pieces) {
     // check for the intersection with the enemy king
@@ -65,5 +41,48 @@ bool King::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
     // now need to check if destination cell is safe from check
     if (!isSafeAt(xEnd, yEnd, pieces))
         return false;
-    return true;
+    //check if a default move was made
+    if ((std::abs(xEnd-this->getPosX())<2 && std::abs(yEnd-this->getPosY())<2)) {
+        this->moved = true;
+        return true;
+    }
+    //check for short castling
+    if (this->getPosY() == yEnd && !this->hasMoved() && xEnd==6) {
+        for (const auto& piece:pieces) {
+            if (piece->getPosX()-3 == this->getPosX() && piece->getPosY() == this->getPosY()) {
+                if (Rook* r = dynamic_cast<Rook*>(piece)) {
+                    if (!r->hasMoved()) {
+                        if (isCellFreeAt(xEnd-1, yEnd, pieces) && isSafeAt(xEnd-1, yEnd, pieces) && isCellFreeAt(xEnd, yEnd, pieces)) {
+                            r->setPosX(r->getPosX()-2);
+                            r->getSprite()->setPosition(this->getSprite()->getPosition().x-Piece::pieceSize, this->getSprite()->getPosition().y);
+                            this->moved = true;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //check for long castling
+    if (this->getPosY() == yEnd && !this->hasMoved() && xEnd==2) {
+        for (const auto& piece:pieces) {
+            if (piece->getPosX()+4 == this->getPosX() && piece->getPosY() == this->getPosY()) {
+                if (Rook* r = dynamic_cast<Rook*>(piece)) {
+                    if (!r->hasMoved()) {
+                        if (isCellFreeAt(xEnd-1, yEnd, pieces) && isSafeAt(xEnd-1, yEnd, pieces) && isCellFreeAt(xEnd, yEnd, pieces) && isCellFreeAt(xEnd+1, yEnd, pieces) && isSafeAt(xEnd+1, yEnd, pieces)) {
+                            r->setPosX(r->getPosX()+3);
+                            r->getSprite()->setPosition(this->getSprite()->getPosition().x+Piece::pieceSize, this->getSprite()->getPosition().y);
+                            this->moved = true;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool King::hasMoved() const{
+    return this->moved;
 }
