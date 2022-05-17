@@ -84,6 +84,14 @@ void Field::loadTextures() {
     this->rookBlack.loadFromFile("../Resources/black_rook.png");
 }
 
+void Field::checkForWinner() {
+    for (const auto &piece:pieces)
+        if (piece->getType() == PieceType::KING && piece->getPosX() == -1) {
+            std::cout << (piece->getColor() == PieceColor::WHITE ? "Black Wins!" : "White Wins!");
+            this->turn = PieceColor::EMPTY;
+        }
+}
+
 void Field::changeTurn() {
     if (this->pieces[this->chosenPieceNumber]->getPosX() == this->xEnd && this->pieces[this->chosenPieceNumber]->getPosY() == this->yEnd)
         return;
@@ -138,7 +146,6 @@ void Field::leftMouseButtonReleased() {
         this->xEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().x - Field::offsetX)/Piece::pieceSize));
         this->yEnd = static_cast<int>(std::round((this->pieces[this->chosenPieceNumber]->getSprite()->getPosition().y - Field::offsetY)/Piece::pieceSize));
 
-        //std::cout << this->xEnd << " " << this->yEnd << "\n";
         if (!this->pieces[this->chosenPieceNumber]->isMoveValid(this->xEnd, this->yEnd, this->pieces) || checkOutOfBorders()) {
             this->pieces[this->chosenPieceNumber]->getSprite()->setPosition(this->initialPosX, this->initialPosY);
             return;
@@ -147,6 +154,7 @@ void Field::leftMouseButtonReleased() {
         checkAndDestroy();
         this->pieces[this->chosenPieceNumber]->setPosX(this->xEnd);
         this->pieces[this->chosenPieceNumber]->setPosY(this->yEnd);
+        checkForWinner();
 
         if (this->pieces[this->chosenPieceNumber]->getType() == PieceType::PAWN && (this->pieces[this->chosenPieceNumber]->getColor() == PieceColor::WHITE ? this->pieces[this->chosenPieceNumber]->getPosY()==0 : this->pieces[this->chosenPieceNumber]->getPosY()==7)) {
             Pawn::promotion(this->xEnd, this->yEnd, pieces, this->chosenPieceNumber);

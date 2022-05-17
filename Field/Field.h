@@ -41,6 +41,7 @@ private:
     void checkAndDestroy();
     void adjustPlacement();
     bool checkOutOfBorders() const;
+    void checkForWinner();
     friend float placeWithOffset(int, char);
 public:
     Field();
