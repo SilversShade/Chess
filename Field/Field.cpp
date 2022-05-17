@@ -147,6 +147,18 @@ void Field::leftMouseButtonReleased() {
         checkAndDestroy();
         this->pieces[this->chosenPieceNumber]->setPosX(this->xEnd);
         this->pieces[this->chosenPieceNumber]->setPosY(this->yEnd);
+
+        if (this->pieces[this->chosenPieceNumber]->getType() == PieceType::PAWN && (this->pieces[this->chosenPieceNumber]->getColor() == PieceColor::WHITE ? this->pieces[this->chosenPieceNumber]->getPosY()==0 : this->pieces[this->chosenPieceNumber]->getPosY()==7)) {
+            Pawn::promotion(this->xEnd, this->yEnd, pieces, this->chosenPieceNumber);
+            if (this->pieces[this->chosenPieceNumber]->getType() == PieceType::ROOK)
+                this->pieces[this->chosenPieceNumber]->getSprite()->setTexture(this->yEnd==0 ? this->rookWhite : this->rookBlack);
+            if (this->pieces[this->chosenPieceNumber]->getType() == PieceType::BISHOP)
+                this->pieces[this->chosenPieceNumber]->getSprite()->setTexture(this->yEnd==0 ? this->bishopWhite : this->bishopBlack);
+            if (this->pieces[this->chosenPieceNumber]->getType() == PieceType::KNIGHT)
+                this->pieces[this->chosenPieceNumber]->getSprite()->setTexture(this->yEnd==0 ? this->knightWhite : this->knightBlack);
+            if (this->pieces[this->chosenPieceNumber]->getType() == PieceType::QUEEN)
+                this->pieces[this->chosenPieceNumber]->getSprite()->setTexture(this->yEnd==0 ? this->queenWhite : this->queenBlack);
+        }
     }
 }
 

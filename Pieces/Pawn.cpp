@@ -1,4 +1,8 @@
 #include "Pawn.h"
+#include "Bishop.h"
+#include "Knight.h"
+#include "Queen.h"
+#include "Rook.h"
 
 Pawn::Pawn(PieceColor color, int x, int y): Piece(color, x, y) {
     this->atStartingPos = true;
@@ -54,4 +58,32 @@ bool Pawn::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
 
 void Pawn::setEnPassantCondition(bool newCondition) {
     this->enPassantCondition = newCondition;
+}
+
+void Pawn::promotion(int x, int y, std::vector<Piece *> &pieces, int n) {
+    sf::Vector2f pawnPos = pieces[n]->getSprite()->getPosition();
+    PieceColor pawnColor = pieces[n]->getColor();
+    delete pieces[n];
+    while (true) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) { // B - Bishop
+            pieces[n] = new Bishop(pawnColor, x, y);
+            pieces[n]->getSprite()->setPosition(pawnPos);
+            break;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) { // K - Knight
+            pieces[n] = new Knight(pawnColor, x, y);
+            pieces[n]->getSprite()->setPosition(pawnPos);
+            break;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) { // R - Rook
+            pieces[n] = new Rook(pawnColor, x, y);
+            pieces[n]->getSprite()->setPosition(pawnPos);
+            break;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) { // Q - Queen
+            pieces[n] = new Queen(pawnColor, x, y);
+            pieces[n]->getSprite()->setPosition(pawnPos);
+            break;
+        }
+    }
 }
