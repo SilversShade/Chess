@@ -22,13 +22,21 @@ bool King::isSafeAt(int x, int y, std::vector<Piece*> &pieces) {
         if ((i.second == y+1 ? this->getColor() == PieceColor::BLACK : this->getColor() == PieceColor::WHITE) && checkColorAt(i.first, i.second, pieces) != this->getColor() && checkTypeAt(i.first, i.second, pieces) == PieceType::PAWN)
             return false;
     //check for intersection with other pieces and "peaceful" pawn movements
+    int xPrev = this->getPosX();
+    int yPrev = this->getPosY();
+    this->setPosX(x);
+    this->setPosY(y);
     for (const auto& piece:pieces) {
         if (piece->getType() != PieceType::KING && piece->getColor() != this->getColor() && piece->isMoveValid(x, y, pieces)) {
             if (piece->getType() == PieceType::PAWN && piece->getPosX() == x)
                 continue;
+            this->setPosX(xPrev);
+            this->setPosY(yPrev);
             return false;
         }
     }
+    this->setPosX(xPrev);
+    this->setPosY(yPrev);
     return true;
 }
 
