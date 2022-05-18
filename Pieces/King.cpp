@@ -52,7 +52,8 @@ bool King::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
             if (piece->getPosX()-3 == this->getPosX() && piece->getPosY() == this->getPosY()) {
                 if (Rook* r = dynamic_cast<Rook*>(piece)) {
                     if (!r->hasMoved()) {
-                        if (isCellFreeAt(xEnd-1, yEnd, pieces) && isSafeAt(xEnd-1, yEnd, pieces) && isCellFreeAt(xEnd, yEnd, pieces)) {
+                        if (isCellFreeAt(xEnd-1, yEnd, pieces) && isSafeAt(xEnd-1, yEnd, pieces) && isCellFreeAt(xEnd, yEnd, pieces) && isSafeAt(xEnd,yEnd,pieces) &&
+                                isSafeAt(xEnd-2, yEnd, pieces)) {
                             r->setPosX(r->getPosX()-2);
                             r->getSprite()->setPosition(this->getSprite()->getPosition().x-Piece::pieceSize, this->getSprite()->getPosition().y);
                             this->moved = true;
@@ -69,7 +70,7 @@ bool King::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
             if (piece->getPosX()+4 == this->getPosX() && piece->getPosY() == this->getPosY()) {
                 if (Rook* r = dynamic_cast<Rook*>(piece)) {
                     if (!r->hasMoved()) {
-                        if (isCellFreeAt(xEnd-1, yEnd, pieces) && isSafeAt(xEnd-1, yEnd, pieces) && isCellFreeAt(xEnd, yEnd, pieces) && isCellFreeAt(xEnd+1, yEnd, pieces) && isSafeAt(xEnd+1, yEnd, pieces)) {
+                        if (isCellFreeAt(xEnd, yEnd, pieces) && isSafeAt(xEnd, yEnd, pieces) && isCellFreeAt(xEnd+1, yEnd, pieces) && isSafeAt(xEnd+1, yEnd, pieces) && isSafeAt(xEnd+2, yEnd, pieces)) {
                             r->setPosX(r->getPosX()+3);
                             r->getSprite()->setPosition(this->getSprite()->getPosition().x+Piece::pieceSize, this->getSprite()->getPosition().y);
                             this->moved = true;
