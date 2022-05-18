@@ -26,17 +26,29 @@ bool King::isSafeAt(int x, int y, std::vector<Piece*> &pieces) {
     int yPrev = this->getPosY();
     this->setPosX(x);
     this->setPosY(y);
+    Piece* opponentPiece;
+    for (const auto& piece:pieces) {
+        if (piece != this && piece->getPosX() == x && piece->getPosY() == y) {
+            piece->setPosX(-1);
+            piece->setPosY(-1);
+            opponentPiece = piece;
+        }
+    }
     for (const auto& piece:pieces) {
         if (piece->getType() != PieceType::KING && piece->getColor() != this->getColor() && piece->isMoveValid(x, y, pieces)) {
             if (piece->getType() == PieceType::PAWN && piece->getPosX() == x)
                 continue;
             this->setPosX(xPrev);
             this->setPosY(yPrev);
+            opponentPiece->setPosX(x);
+            opponentPiece->setPosY(y);
             return false;
         }
     }
     this->setPosX(xPrev);
     this->setPosY(yPrev);
+    opponentPiece->setPosX(x);
+    opponentPiece->setPosY(y);
     return true;
 }
 
