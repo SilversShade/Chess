@@ -26,12 +26,13 @@ bool King::isSafeAt(int x, int y, std::vector<Piece*> &pieces) {
     int yPrev = this->getPosY();
     this->setPosX(x);
     this->setPosY(y);
-    Piece* opponentPiece;
-    for (const auto& piece:pieces) {
-        if (piece != this && piece->getPosX() == x && piece->getPosY() == y) {
-            piece->setPosX(-1);
-            piece->setPosY(-1);
-            opponentPiece = piece;
+
+    int opponentPieceNumber = -1;
+    for (int i=0;i<32;i++) {
+        if (pieces[i] != this && pieces[i]->getPosX() == x && pieces[i]->getPosY() == y) {
+            pieces[i]->setPosX(-1);
+            pieces[i]->setPosY(-1);
+            opponentPieceNumber = i;
         }
     }
     for (const auto& piece:pieces) {
@@ -40,15 +41,19 @@ bool King::isSafeAt(int x, int y, std::vector<Piece*> &pieces) {
                 continue;
             this->setPosX(xPrev);
             this->setPosY(yPrev);
-            opponentPiece->setPosX(x);
-            opponentPiece->setPosY(y);
+            if (opponentPieceNumber != -1) {
+                pieces[opponentPieceNumber]->setPosX(x);
+                pieces[opponentPieceNumber]->setPosY(y);
+            }
             return false;
         }
     }
     this->setPosX(xPrev);
     this->setPosY(yPrev);
-    opponentPiece->setPosX(x);
-    opponentPiece->setPosY(y);
+    if (opponentPieceNumber != -1) {
+        pieces[opponentPieceNumber]->setPosX(x);
+        pieces[opponentPieceNumber]->setPosY(y);
+    }
     return true;
 }
 
