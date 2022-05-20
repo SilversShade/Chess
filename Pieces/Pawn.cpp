@@ -26,6 +26,8 @@ bool Pawn::enPassantConditionAt(int x, int y, std::vector<Piece*> &pieces) {
 }
 
 bool Pawn::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
+    if (this->getPosX() == -1)
+        return false;
     // from initial position (2 or 1) forward
     if (this->atStartingPos && xEnd == this->getPosX() && (this->getColor() == PieceColor::WHITE ? this->getPosY()-yEnd==1 || this->getPosY()-yEnd==2 : yEnd-this->getPosY()==1 || yEnd-this->getPosY()==2)) {
         if (!isCellFreeAt(xEnd, yEnd, pieces))
