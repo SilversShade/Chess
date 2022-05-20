@@ -5,6 +5,8 @@ Bishop::Bishop(PieceColor color, int x, int y) : Piece(color, x, y) {
 }
 
 bool Bishop::isMoveValid(int xEnd, int yEnd, std::vector<Piece*> &pieces) {
+    if (this->getPosX() == -1)
+        return false;
     PieceColor colorAtDest = checkColorAt(xEnd, yEnd, pieces);
     if (colorAtDest == this->getColor())
         return false;
